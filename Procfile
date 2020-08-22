@@ -1,1 +1,1 @@
-web: gunicorn stackathon-flask:main
+web: gunicorn main:main
