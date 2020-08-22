@@ -35,7 +35,6 @@ def generateChart():
     label = request.args.get('chart_type')
     api_key = request.args.get('api_key')
     quandl.ApiConfig.api_key=api_key
-    print('ahhhhhh')
     df = quandl.get_table('SHARADAR/DAILY', ticker=ticker) 
     # Parsing to the pandas label
     method = mapDict[label]
@@ -62,7 +61,7 @@ def generateChart():
     plt.title('Historical {label} of {ticker}'.format(label=label, ticker=ticker))
     plt.savefig('flaskChart.png')
     plt.close()
-    return json.dumps(df.evebitda[0])
+    return "OK"
 
 @app.route('/getChart')
 def getChart():
