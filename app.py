@@ -61,3 +61,5 @@ def index():
 
 # generateChart("MSFT","2018-01-01","2020-08-15")
 
+if __name__ == "__main__":
+    app.run()
