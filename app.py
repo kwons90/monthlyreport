@@ -7,59 +7,56 @@ from flask import Flask
 # import sys
 # Creating variables sent in the rquest
 
+# utils
+mapDict = {
+    'EV/EBITDA':'evebitda',
+    'P/E': 'pe',
+    'P/B': 'pb'
+}
+
+def parseTime(strdate):
+    l = strdate.split('-')
+    return datetime.datetime(int(l[0]),int(l[1]),int(l[2]))
+
+# Initialize server
 app = Flask(__name__)
 
-
+# Routes
 @app.route('/')
 def index():
     return '<h1>hello</h1>'
 
-# @app.route('/generateChart')
-# def generateChart(ticker, start_date, end_date):
-#     ticker = requests.args.get('ticker')
-#     start_date = requests.args.get('start_date')
-#     end_date = requests.args.get('end_date')
-#     api_key = requests.args.get('api_key')
-#     df = get_historical_data(ticker, start_date, end_date, output_format='pandas', token=api_key)
-#     plt.plot(df.index, df['close'])
-#     plt.xlabel("date")
-#     plt.ylabel("$ price")
-#     plt.title("Stock Price")
-#     df["30-day Moving Average"] = df['close'].rolling(window=30).mean()
-#     df["60-day Moving Average"] = df['close'].rolling(window=60).mean()
-#     df['ewma'] = df['close'].ewm(halflife=0.5, min_periods=20).mean()
-#     plt.figure(figsize=(10,10))
-#     plt.plot(df['30-day Moving Average'], 'g--', label="30-day Moving Average")
-#     plt.plot(df['60-day Moving Average'], 'r--', label="60-day Moving Average")
-#     plt.plot(df['close'], label="End of Day Price")
-#     plt.legend()
-#     plt.show()
+@app.route('/generateChart')
+def generateChart(ticker,label, start_date,end_date):
+    df = quandl.get_table('SHARADAR/DAILY', ticker=ticker) 
 
-# generateChart(ticker,start_date,end_date)
-# ticker = sys.argv[1]
-# start_date = sys.argv[2]
-# end_date = sys.argv[3]
-# quandl.ApiConfig.api_key = sys.argv[4]
-# quandl.ApiConfig.api_key="KBmpxPvadzxotsKEm-nQ"
+    # Parsing to the pandas label
+    method = mapDict[label]
+    
+    # Mapping rolling average
+    df["30-day Moving Average"] = df[method].rolling(window=30).mean()
+    df["60-day Moving Average"] = df[method].rolling(window=60).mean()
 
-# print("Output from Python") 
-# print("ticker: " + sys.argv[1]) 
-# print("start_date: " + sys.argv[2]) 
-# print("end_date: " + sys.argv[3])
-# print("api_key: " + sys.argv[4])
+    # Create a boolean in the time range after parsing string into datetime
+    start_time = parseTime(start_date)
+    end_time = parseTime(end_date)
+    mask = (df['date'] > start_time) & (df['date'] <= end_time)
+    
+    # Generate average
+    df["Average for Period"] = df.loc[mask][method].mean()
 
-# Getting historical data requested
-
-# plt.figure(figsize=(10,8))
-
-# Render Chart
-
-
-
-# if __name__ == "__main__":
-#     app.run(debug=True)
-
-# generateChart("MSFT","2018-01-01","2020-08-15")
+    #Chart
+    plt.xlabel("Date")
+    plt.ylabel(label)
+    plt.title('Historical {label}'.format(label=label))
+    plt.figure(figsize=(10,10))
+    plt.plot(df.loc[mask].date, df.loc[mask]['30-day Moving Average'], 'g', label="30-day Moving Average")
+    plt.plot(df.loc[mask].date, df.loc[mask]['60-day Moving Average'], 'r', label="60-day Moving Average")
+    plt.plot(df.loc[mask].date, df.loc[mask]['Average for Period'], 'b', label="Average for Period")
+    plt.plot(df.loc[mask].date, df.loc[mask]['evebitda'], 'k', label=label)
+    plt.legend()
+    jpegFile = plt.savefig('testplot.png')
+    return jpegFile
 
 if __name__ == "__main__":
     app.run()
