@@ -1,9 +1,9 @@
-from datetime import datetime
+import datetime
 import pandas as pd
 import quandl
 import matplotlib.pyplot as plt
 import requests
-from flask import Flask
+from flask import Flask, request, send_file
 # import sys
 # Creating variables sent in the request
 
@@ -28,10 +28,12 @@ def index():
 
 @app.route('/generateChart')
 def generateChart():
-    ticker = requests.args.get('ticker')
-    start_date = requests.args.get('start_date')
-    end_date = requests.args.get('end_date')
-    label = requests.args.get['chart_type']
+    ticker = request.args.get('ticker')
+    start_date = request.args.get('start_date')
+    end_date = request.args.get('end_date')
+    label = request.args.get('chart_type')
+    api_key = request.args.get('api_key')
+    quandl.ApiConfig.api_key=api_key
     print('ahhhhhh')
     df = quandl.get_table('SHARADAR/DAILY', ticker=ticker) 
     # Parsing to the pandas label
@@ -46,17 +48,17 @@ def generateChart():
     # Generate average
     df["Average for Period"] = df.loc[mask][method].mean()
     #Chart
-    plt.xlabel("Date")
-    plt.ylabel(label)
-    plt.title('Historical {label}'.format(label=label))
     plt.figure(figsize=(10,10))
     plt.plot(df.loc[mask].date, df.loc[mask]['30-day Moving Average'], 'g', label="30-day Moving Average")
     plt.plot(df.loc[mask].date, df.loc[mask]['60-day Moving Average'], 'r', label="60-day Moving Average")
     plt.plot(df.loc[mask].date, df.loc[mask]['Average for Period'], 'b', label="Average for Period")
     plt.plot(df.loc[mask].date, df.loc[mask]['evebitda'], 'k', label=label)
     plt.legend()
-    jpegFile = plt.savefig('testplot.png')
-    return jpegFile
+    plt.xlabel("Date")
+    plt.ylabel(label)
+    plt.title('Historical {label}'.format(label=label))
+    plt.savefig('chart.png')
+    return send_file('chart.png', mimetype='image/png')
 
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)
