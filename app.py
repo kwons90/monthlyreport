@@ -4,7 +4,9 @@ import quandl
 import matplotlib.pyplot as plt
 import requests
 from flask import Flask, request, send_file
+import json
 # import sys
+
 
 # utils
 mapDict = {
@@ -54,13 +56,14 @@ def generateChart():
     plt.plot(df.loc[mask].date, df.loc[mask]['60-day Moving Average'], 'r', label="60-day Moving Average")
     plt.plot(df.loc[mask].date, df.loc[mask]['Average for Period'], 'b', label="Average for Period")
     plt.plot(df.loc[mask].date, df.loc[mask][method], 'k', label=label)
+
     plt.legend()
     plt.xlabel("Date")
     plt.ylabel(label)
     plt.title('Historical {label}'.format(label=label))
     plt.savefig('flaskChart.png')
     plt.close()
-    return 'done'
+    return json.dumps(df.evebitda[0])
 
 @app.route('/getChart')
 def getChart():
