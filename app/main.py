@@ -11,7 +11,7 @@ app = Flask(__name__)
 
 
 @app.route('/')
-def check():
+def index():
     return '<h1>hello</h1>'
 
 # @app.route('/generateChart')
@@ -54,8 +54,10 @@ def check():
 
 # Render Chart
 
-if __name__ == '__main__':
-    app.run(debug=True)
+
+
+# if __name__ == "__main__":
+#     app.run(debug=True)
 
 # generateChart("MSFT","2018-01-01","2020-08-15")
 
