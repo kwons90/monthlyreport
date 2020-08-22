@@ -51,7 +51,7 @@ def generateChart():
     #Chart
     # plt.switch_backend("agg")
     plt.switch_backend('agg')
-    plt.figure(figsize=(10,10))
+    plt.figure(figsize=(10,6))
     plt.plot(df.loc[mask].date, df.loc[mask]['30-day Moving Average'], 'g', label="30-day Moving Average")
     plt.plot(df.loc[mask].date, df.loc[mask]['60-day Moving Average'], 'r', label="60-day Moving Average")
     plt.plot(df.loc[mask].date, df.loc[mask]['Average for Period'], 'b', label="Average for Period")
