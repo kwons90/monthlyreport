@@ -56,11 +56,10 @@ def generateChart():
     plt.plot(df.loc[mask].date, df.loc[mask]['60-day Moving Average'], 'r', label="60-day Moving Average")
     plt.plot(df.loc[mask].date, df.loc[mask]['Average for Period'], 'b', label="Average for Period")
     plt.plot(df.loc[mask].date, df.loc[mask][method], 'k', label=label)
-
     plt.legend()
     plt.xlabel("Date")
     plt.ylabel(label)
-    plt.title('Historical {label}'.format(label=label))
+    plt.title('Historical {label} of {ticker}'.format(label=label))
     plt.savefig('flaskChart.png')
     plt.close()
     return json.dumps(df.evebitda[0])
