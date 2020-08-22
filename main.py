@@ -3,11 +3,12 @@ import pandas as pd
 import quandl
 import matplotlib.pyplot as plt
 import requests
-
-# Creating variables sent in the rquest
 from flask import Flask
+# import sys
+# Creating variables sent in the rquest
+
 app = Flask(__name__)
-import sys
+
 
 @app.route('/')
 def check():
