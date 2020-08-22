@@ -28,6 +28,7 @@ def index():
 
 @app.route('/generateChart')
 def generateChart(ticker,label, start_date,end_date):
+    print('ahhhhhh')
     df = quandl.get_table('SHARADAR/DAILY', ticker=ticker) 
 
     # Parsing to the pandas label
