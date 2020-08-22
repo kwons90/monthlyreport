@@ -59,7 +59,7 @@ def generateChart():
     plt.legend()
     plt.xlabel("Date")
     plt.ylabel(label)
-    plt.title('Historical {label} of {ticker}'.format(label=label))
+    plt.title('Historical {label} of {ticker}'.format(label=label, ticker=ticker))
     plt.savefig('flaskChart.png')
     plt.close()
     return json.dumps(df.evebitda[0])
