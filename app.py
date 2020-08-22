@@ -5,7 +5,6 @@ import matplotlib.pyplot as plt
 import requests
 from flask import Flask, request, send_file
 # import sys
-# Creating variables sent in the request
 
 # utils
 mapDict = {
@@ -52,17 +51,17 @@ def generateChart():
     plt.plot(df.loc[mask].date, df.loc[mask]['30-day Moving Average'], 'g', label="30-day Moving Average")
     plt.plot(df.loc[mask].date, df.loc[mask]['60-day Moving Average'], 'r', label="60-day Moving Average")
     plt.plot(df.loc[mask].date, df.loc[mask]['Average for Period'], 'b', label="Average for Period")
-    plt.plot(df.loc[mask].date, df.loc[mask]['evebitda'], 'k', label=label)
+    plt.plot(df.loc[mask].date, df.loc[mask][method], 'k', label=label)
     plt.legend()
     plt.xlabel("Date")
     plt.ylabel(label)
     plt.title('Historical {label}'.format(label=label))
-    plt.savefig('chart.png')
+    plt.savefig('flaskChart.png')
     return 'done'
 
 @app.route('/getChart')
 def getChart():
-    return send_file('chart.png', mimetype='image/png')
+    return send_file('flaskChart.png', mimetype='image/png')
 
 if __name__ == "__main__":
     app.run(debug=True)
