@@ -47,7 +47,8 @@ def generateChart():
     # Generate average
     df["Average for Period"] = df.loc[mask][method].mean()
     #Chart
-    plt.switch_backend("agg")
+    # plt.switch_backend("agg")
+    plt.switch_backend('agg')
     plt.figure(figsize=(10,10))
     plt.plot(df.loc[mask].date, df.loc[mask]['30-day Moving Average'], 'g', label="30-day Moving Average")
     plt.plot(df.loc[mask].date, df.loc[mask]['60-day Moving Average'], 'r', label="60-day Moving Average")
@@ -58,6 +59,7 @@ def generateChart():
     plt.ylabel(label)
     plt.title('Historical {label}'.format(label=label))
     plt.savefig('flaskChart.png')
+    plt.close()
     return 'done'
 
 @app.route('/getChart')
