@@ -58,6 +58,10 @@ def generateChart():
     plt.ylabel(label)
     plt.title('Historical {label}'.format(label=label))
     plt.savefig('chart.png')
+    return 'done'
+
+@app.route('/getChart')
+def getChart():
     return send_file('chart.png', mimetype='image/png')
 
 if __name__ == "__main__":
