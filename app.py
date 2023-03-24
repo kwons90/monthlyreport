@@ -215,9 +215,8 @@ def getReport():
     #convert dates to string
     join_date = min(performance["datetime"])
     join_date_str = join_date.strftime("%Y-%m-%d")
-    join_date_str
 
-    #generate graph
+    #generate grap
     fig, ax1 = plt.subplots(1, 1, figsize=(5, 3))
     ax2 = ax1.twinx()
 
